@@ -1,0 +1,80 @@
+create database school;
+
+\c school
+
+****************************************************************
+# tables creation
+
+
+create table student (student_id serial primary key ,student_name varchar(50) not null);
+
+
+create table student_details (student_ssn varchar(50) primary key ,student_name varchar(50) not null,email varchar(50) not null, phone varchar(50),gpa float,level integer,student_id integer not null references student(student_id)  );
+
+create table teacher (teacher_id serial primary key ,teacher_name varchar(50) not null,teacher_dep varchar(50));
+
+
+create table courses (course_id serial primary key ,course_name varchar(50) not null,course_hours integer not null, teacher_id integer not null references teacher(teacher_id));
+
+create table Enrollments (student_id integer not null references student(student_id), course_id integer not null references courses(course_id));
+
+
+*******************************************************************
+# Insertion
+
+
+insert into student (student_name) values ('Maria'),('Rahil'),('Ahmed'),('Andrew'),('nermeen'));
+
+
+INSERT INTO student_details (student_ssn, student_name, email, phone, gpa, level, student_id) 
+VALUES 
+(30109192500067, 'Maria', 'maria@example.com', '123-456-7890', 3.5, 2, 1),
+(30109192500068, 'Rahil', 'rahil@example.com', '234-567-8901', 3.6, 3, 2),
+(30109192500069, 'Ahmed', 'ahmed@example.com', '345-678-9012', 3.7, 4, 3),
+(30109192500070, 'Andrew', 'andrew@example.com', '456-789-0123', 3.8, 3, 4),
+(30109192500071, 'Nermeen', 'nermeen@example.com', '567-890-1234', 3.9, 1, 5);
+
+
+
+INSERT INTO courses (course_id, course_name, course_hours, teacher_id) 
+VALUES 
+(1, 'Math1', 3, 1),
+(2, 'Physics', 4, 2),
+(3, 'Math2', 3, 1),
+(4, 'AI', 3, 2),
+(5, 'IT fundementals', 4, 3),
+(6, 'OOP', 4, 2);
+
+INSERT INTO teachers (teacher_id, teacher_name, teacher_dep) 
+VALUES 
+(1, 'said', 'CS'),
+(2, 'Ragaa', 'IS'),
+(3, 'Ahmed', 'bio'),
+(4, 'abdelrahman', 'CS'),
+(5, 'mina', 'CS');
+
+INSERT INTO enrollment (student_id, course_id) 
+VALUES 
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 4),
+(3, 5),
+(4, 1),
+(5, 2),
+(5, 3);
+
+******************************************************************
+#selection querys
+
+select * from student_details;
+
+
+select course_name , teacher_name from courses,teacher where courses.teacher_id= teacher.teacher_id;
+
+
+select (select student_name from student where student.student_id =Enrollments.student_id ),(select course_name from courses where courses.course_id =Enrollments.course_id ) from Enrollments;
+
+
+
+
